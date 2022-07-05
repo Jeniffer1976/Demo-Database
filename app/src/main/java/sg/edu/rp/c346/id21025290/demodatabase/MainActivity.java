@@ -1,6 +1,8 @@
 package sg.edu.rp.c346.id21025290.demodatabase;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     ListView lvTasks;
     EditText etDesc, etDate;
     ToggleButton tbOrder;
+    private static String order;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         etDate = findViewById(R.id.editTextDate);
         tbOrder = findViewById(R.id.toggleButtonOrder);
 
+
         DBHelper db = new DBHelper(MainActivity.this);
 
         btnInsert.setOnClickListener(new View.OnClickListener() {
@@ -42,33 +46,40 @@ public class MainActivity extends AppCompatActivity {
                 db.insertTask(etDesc.getText().toString(), etDate.getText().toString());
             }
         });
-//        if (db.getTaskContent().isEmpty()) {
-//            btnGetTasks.setEnabled(false);
-//        } else{
-            btnGetTasks.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String txt = "";
-                    // Insert a task
-                    if(tbOrder.isChecked()) {
-                        ArrayList<String> data = db.getTaskContentAsc();
-                    } else {
-                        ArrayList<String> data = db.getTaskContentDesc();
-                    }
-                    ArrayList<Task> dataList = db.getTasks();
-                    db.close();
+        btnGetTasks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<String> data = db.getTaskContent();
+                ArrayList<Task> dataList = db.getTasks();
+                db.close();
 
-                    for (int i = 0; i < data.size(); i++) {
-                        Log.d("Database Content", i + ". " + data.get(i));
-                        txt += i + ". " + data.get(i) + "\n";
-                    }
+                String txt = "";
 
-                    tvTasks.setText(txt);
-                    ArrayAdapter adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, dataList);
-                    lvTasks.setAdapter(adapter);
+                for (int i = 0; i < data.size(); i++) {
+                    Log.d("Database Content", i + ". " + data.get(i));
+                    txt += i + ". " + data.get(i) + "\n";
                 }
-            });
-//        }
+
+                tvTasks.setText(txt);
+                ArrayAdapter adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, dataList);
+                lvTasks.setAdapter(adapter);
+            }
+        });
+
+        tbOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (tbOrder.isChecked()) {
+                    order = "ASC";
+
+                } else {
+                    order = "DESC";
+                }
+            }
+        });
+
+
         btnClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,5 +94,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+    public static String getOrder(){
+        return order;
     }
 }
