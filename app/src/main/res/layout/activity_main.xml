@@ -49,16 +49,6 @@
         android:text="@string/clear" />
 
 </LinearLayout>
-
-    <ToggleButton
-        android:id="@+id/toggleButtonOrder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:textOff="Descending"
-        android:textOn="Ascending"
-        android:textSize="10sp" />
-
     <TextView
         android:id="@+id/textViewTasks"
         android:layout_width="match_parent"

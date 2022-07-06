@@ -2,15 +2,10 @@ package sg.edu.rp.c346.id21025290.demodatabase;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.ToggleButton;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import java.util.ArrayList;
 
 
@@ -65,8 +60,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     public ArrayList<String> getTaskContent() {
-//        MainActivity main = new MainActivity();
-//        String order = main.order();
         String order = MainActivity.getOrder();
 
         // Create an ArrayList that holds String objects
@@ -106,7 +99,7 @@ public class DBHelper extends SQLiteOpenHelper {
         String selectQuery = "SELECT " + COLUMN_ID + ", "
                 + COLUMN_DESCRIPTION + ", "
                 + COLUMN_DATE
-                + " FROM " + TABLE_TASK + " ORDER BY 2 DESC ";
+                + " FROM " + TABLE_TASK + " ORDER BY 2 "+order;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);

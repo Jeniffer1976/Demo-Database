@@ -2,7 +2,6 @@ package sg.edu.rp.c346.id21025290.demodatabase;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 
@@ -20,8 +18,8 @@ public class MainActivity extends AppCompatActivity {
     TextView tvTasks;
     ListView lvTasks;
     EditText etDesc, etDate;
-    ToggleButton tbOrder;
     private static String order;
+    boolean altOrder = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         btnClear = findViewById(R.id.buttonClear);
         etDesc = findViewById(R.id.editTextDesc);
         etDate = findViewById(R.id.editTextDate);
-        tbOrder = findViewById(R.id.toggleButtonOrder);
 
 
         DBHelper db = new DBHelper(MainActivity.this);
@@ -49,6 +46,14 @@ public class MainActivity extends AppCompatActivity {
         btnGetTasks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (altOrder) {
+                    order = "ASC";
+                    altOrder = false;
+
+                } else {
+                    order = "DESC";
+                    altOrder = true;
+                }
                 ArrayList<String> data = db.getTaskContent();
                 ArrayList<Task> dataList = db.getTasks();
                 db.close();
@@ -63,19 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 tvTasks.setText(txt);
                 ArrayAdapter adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, dataList);
                 lvTasks.setAdapter(adapter);
-            }
-        });
 
-        tbOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (tbOrder.isChecked()) {
-                    order = "ASC";
-
-                } else {
-                    order = "DESC";
-                }
             }
         });
 
